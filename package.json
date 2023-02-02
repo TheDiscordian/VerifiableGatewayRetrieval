@@ -4,6 +4,8 @@
   "description": "For verifying CAR files in a browser.",
   "main": "script.js",
   "scripts": {
+    "start": "cd web && python3 -m http.server",
+    "build": "python3 tools/copyImports.py",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Discordian",

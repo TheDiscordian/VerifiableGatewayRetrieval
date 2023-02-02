@@ -21,7 +21,9 @@ npm install
 npm run build
 ```
 
-Now you can simply open `web/index.html` in any web browser to see [the demo](https://ipfs.io/ipfs/QmcAnEkb2SMCDeSfmTFQDL5nvhcGtBEyWrcxxtuJ8nzwqH).
+## Run Demo
+
+Run `npm start` and navigate to http://localhost:8000/ in your browser or [click here](https://ipfs.io/ipfs/QmNTCeiXdSm4TTpBPL1wk4WL7aoYBYhLwwbPVG7yNvFu8b) to see a snapshot.
 
 ## Contributing
 
