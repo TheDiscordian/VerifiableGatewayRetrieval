@@ -26,7 +26,13 @@ const hashes = {
 // The gateways we can use
 const gateways = [
 	{ url: "https://dweb.link/", subdomain: true },
-	{ url: "https://ipfs.io/", subdomain: false }
+	{ url: "https://ipfs.io/", subdomain: false },
+	{ url: "https://ipfs.runfission.com/", subdomain: false },
+	{ url: "https://jorropo.net/", subdomain: false },
+	{ url: "https://ipfs.czip.it/", subdomain: false },
+	{ url: "https://ipfs.best-practice.se/", subdomain: false },
+	{ url: "https://storry.tv/", subdomain: true },
+	{ url: "https://ipfs.litnet.work/", subdomain: false }
 ];
 
 // _fetchCar fetches a CAR file from a random gateway and verifies it
@@ -73,7 +79,7 @@ async function verifyCar(carFile, cid) {
 	// Create a CAR block iterator from the bytes
 	const car = await IpldCar.CarBlockIterator.fromBytes(carFile);
 	
-	//  Verify step 1: if we know what CID to expect, check that's indeed what we've got.
+	//  Verify step 1: if we know what CID to expect, check that's indeed what we've got
 	if (cid != undefined) {
 		if (!Multiformats.CID.parse(cid).equals(car._roots[0])) {
 			console.log(`Mismatch: root CID of CAR (${car._roots[0].toString()}) does not match expected CID (${cid})`);
@@ -116,7 +122,7 @@ function readFile(input) {
 		let nameSplit = file.name.split(".car");
 		if (nameSplit.length == 2) {
 			try {
-				// If the left half of the filename is a CID, and the right half is ".car", use the left half as a CID to verify against.
+				// If the left half of the filename is a CID, and the right half is ".car", use the left half as a CID to verify against
 				cid = Multiformats.CID.parse(nameSplit[0]).toV1().toString();
 			} catch {}
 		}
@@ -129,4 +135,3 @@ function readFile(input) {
 	};
 
 }
-
