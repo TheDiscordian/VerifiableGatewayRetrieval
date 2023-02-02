@@ -1,0 +1,3 @@
+node_modules
+web/libs/*.js
+.DS_Store

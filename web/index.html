@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>CAR Verifier</title>
+	<meta charset="utf-8">
+	<script src="libs/multiformats.min.js"></script>
+	<script src="libs/ipld-car.min.js"></script>
+	<script src="libs/ipld-dag-cbor.min.js"></script>
+	<script src="libs/ipld-dag-pb.min.js"></script>
+	<script src="libs/ipld-dag-json.min.js"></script>
+	<script src="script.js"></script>
+</head>
+
+<body>
+	<input type="file" id="file" onchange="readFile(this)"><br>
+	<input type="text" id="cidBox" style="width:40em;"><button onclick="_fetchCar(document.getElementById('cidBox').value);">Verify</button>
+</body>
+</html>
