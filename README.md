@@ -1,6 +1,6 @@
 ![Preview](preview.png)
 
-For verifying [CAR files](https://github.com/ipld/js-car) in a browser. Work in progress.
+For verifying [CAR files](https://github.com/ipld/js-car) in a browser. Check out a [snapshot here](https://w3s.link/ipfs/QmRWyKduAjkAsAZJmweX29D6qyv8TgmwSjB5LCWbkzNrWa).
 
 ## Requirements
 
@@ -25,7 +25,7 @@ npm run build
 
 ## Run Demo
 
-Run `npm start` and navigate to http://localhost:8000/ in your browser or [click here](https://w3s.link/ipfs/QmRWyKduAjkAsAZJmweX29D6qyv8TgmwSjB5LCWbkzNrWa) to see a snapshot.
+Run `npm start` and navigate to http://localhost:8000/ in your browser.
 
 ## Contributing
 
