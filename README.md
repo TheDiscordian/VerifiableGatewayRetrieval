@@ -23,7 +23,7 @@ npm run build
 
 ## Run Demo
 
-Run `npm start` and navigate to http://localhost:8000/ in your browser or [click here](https://bafybeian4z4gqxqvpoei34xc65fymi2rwjmp2czmj6hm5eyz5o5mdhw36e.ipfs.w3s.link/) to see a snapshot.
+Run `npm start` and navigate to http://localhost:8000/ in your browser or [click here](https://w3s.link/ipfs/QmRWyKduAjkAsAZJmweX29D6qyv8TgmwSjB5LCWbkzNrWa) to see a snapshot.
 
 ## Contributing
 
@@ -33,4 +33,4 @@ We ❤️ all our contributors; this project wouldn’t be what it is without yo
 
 This repository falls under the IPFS [Code of Conduct](https://github.com/ipfs/community/blob/master/code-of-conduct.md).
 
-Please reach out to us in one of our [chat](https://docs.ipfs.tech/community/chat/) rooms.
+Please reach out to us in one of our [chat rooms](https://docs.ipfs.tech/community/chat/).

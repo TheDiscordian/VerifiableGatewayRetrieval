@@ -24,16 +24,17 @@
 		</div>
 		<div class="tool_box" id="file_verifier">
 			<h2>Verify Local CAR File</h2>
-			<input onchange="setFile(this)" type="file"><button onclick="readFile()">Verify File</button>
+			<input onchange="setFile(this)" type="file" style="margin-right:0.25em;"><button onclick="readFile()">Verify File</button>
 		</div>
 		<div class="tool_box" id="gateway_verifier">
 			<h2>Verify Gateway</h2>
 			<label style="font-weight:bold;">CID: </label><input type="text" id="cidBox" style="width:30em;margin-right:0.2em;"><button onclick="_fetchCar(document.getElementById('cidBox').value);">Verify From Random Gateway</button>
 		</div>
 		<div class="tool_box" id="helpful_info">
-			<h2>Helpful Information</h2>
-			<p>For more information on CAR files, please visit the <a href="https://ipld.io/specs/transport/car/carv1/">CARv1 Specification</a>.</p>
-			<p>For more information on the IPFS project, please visit <a href="https://ipfs.tech/">ipfs.tech</a>.</p>
+			<h2>🚗 Helpful Information 🚗</h2>
+			<p>For more information on CAR files, checkout <a href="https://web3.storage/docs/how-tos/work-with-car-files/">Working with Content Archives</a> by web3.storage or dive into the <a href="https://ipld.io/specs/transport/car/carv1/">CARv1 Specification</a>. To quickly create a CAR file visit <a href="https://car.ipfs.io/">car.ipfs.io</a> to get started.</p>
+			<p>For more information on the IPFS project, please visit <a href="https://ipfs.tech/">ipfs.tech</a> and join <a href="https://docs.ipfs.tech/community/chat/">our community</a> to learn and build with other forward-thinking people.</p>
+			<p>Check out the <a href="https://github.com/TheDiscordian/VerifiableGatewayRetrieval">source code for this tool on GitHub</a>.</p>
 		</div>
 	</div>
 	<div id="log_box" class="log_box" hidden>
