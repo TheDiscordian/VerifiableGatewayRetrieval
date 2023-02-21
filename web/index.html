@@ -9,10 +9,38 @@
 	<script src="libs/ipld-dag-pb.min.js"></script>
 	<script src="libs/ipld-dag-json.min.js"></script>
 	<script src="script.js"></script>
+	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
 <body>
-	<input type="file" id="file" onchange="readFile(this)"><br>
-	<input type="text" id="cidBox" style="width:40em;"><button onclick="_fetchCar(document.getElementById('cidBox').value);">Verify</button>
+	<img src="ipfs.png" style="width:10em;position:fixed;left:calc(100vw - 11em);"><br>
+	<div class="title_box">
+		<h1>IPFS CAR Verification Tools</h1>
+	</div>
+	<div class="verify_box">
+		<div class="tool_buttons">
+			<button onclick="showTool(0);">Verify Local CAR File</button> <button onclick="showTool(1);">Verify Gateway</button>
+			<button onclick="showTool(2);">Learn More</button>
+		</div>
+		<div class="tool_box" id="file_verifier">
+			<h2>Verify Local CAR File</h2>
+			<input onchange="setFile(this)" type="file"><button onclick="readFile()">Verify File</button>
+		</div>
+		<div class="tool_box" id="gateway_verifier">
+			<h2>Verify Gateway</h2>
+			<label style="font-weight:bold;">CID: </label><input type="text" id="cidBox" style="width:30em;margin-right:0.2em;"><button onclick="_fetchCar(document.getElementById('cidBox').value);">Verify From Random Gateway</button>
+		</div>
+		<div class="tool_box" id="helpful_info">
+			<h2>Helpful Information</h2>
+			<p>For more information on CAR files, please visit the <a href="https://ipld.io/specs/transport/car/carv1/">CARv1 Specification</a>.</p>
+			<p>For more information on the IPFS project, please visit <a href="https://ipfs.tech/">ipfs.tech</a>.</p>
+		</div>
+	</div>
+	<div id="log_box" class="log_box" hidden>
+		<p id="output"></p>
+	</div>
+	<div class="made_with_love">
+		<p>Made with ❤️ by <a href="https://protocol.ai/">Protocol Labs</a></p>
+	</div>
 </body>
 </html>

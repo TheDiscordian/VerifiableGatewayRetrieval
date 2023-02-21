@@ -1,3 +1,7 @@
+let currentFile = undefined;
+let firstClick = true;
+let firstLog = true;
+
 // sha256 hasher for the browser
 const sha256 = Multiformats.hasher.from({
 	// As per multiformats table
@@ -35,14 +39,30 @@ const gateways = [
 	{ url: "https://ipfs.litnet.work/", subdomain: false }
 ];
 
-// _fetchCar fetches a CAR file from a random gateway and verifies it
-async function _fetchCar(cid) {
-	let gateway = gateways[Math.floor(Math.random()*gateways.length)];
-	console.log(`Using gateway: ${gateway.url}`);
-	fetchCar(cid, gateway);
+function doLog(s, loud = false) {
+	let outEle = document.getElementById("output");
+	if (loud) {
+		if (!firstLog) {
+			outEle.innerHTML = s + "<br>" + outEle.innerHTML;
+		} else {
+			firstLog = false;
+			outEle.innerHTML = s;
+			// TODO Finish this element, then unhide it.
+		}
+		// TODO no more alert
+		alert(s);
+	}
+	console.log(s);
 }
 
-// fetchCar fetches a CAR file from the given gateway and verifies it
+// _fetchCar fetches a CAR file from a random gateway and verifies it, returning the underlying data
+async function _fetchCar(cid) {
+	let gateway = gateways[Math.floor(Math.random()*gateways.length)];
+	doLog(`Using gateway: ${gateway.url}`);
+	return await fetchCar(cid, gateway);
+}
+
+// fetchCar fetches a CAR file from the given gateway and verifies it, returning the underlying data
 async function fetchCar(cid, gateway) {
 	let url = undefined;
 	// If the gateway uses subdomains, we need to construct the URL differently
@@ -71,47 +91,72 @@ async function fetchCar(cid, gateway) {
 	}
 
 	// Verify the CAR file
-	verifyCar(new Uint8Array(await res.arrayBuffer()), cid);
+	return await verifyCar(new Uint8Array(await res.arrayBuffer()), cid);
 }
 
 // verifyCar verifies a CAR file
 async function verifyCar(carFile, cid) {
 	// Create a CAR block iterator from the bytes
-	const car = await IpldCar.CarBlockIterator.fromBytes(carFile);
+	// const car = await IpldCar.CarBlockIterator.fromBytes(carFile);
+	const car = await IpldCar.CarReader.fromBytes(carFile);
+	doLog(car)
+	let returnedBytes = new Uint8Array();
 	
 	//  Verify step 1: if we know what CID to expect, check that's indeed what we've got
 	if (cid != undefined) {
-		if (!Multiformats.CID.parse(cid).equals(car._roots[0])) {
-			console.log(`Mismatch: root CID of CAR (${car._roots[0].toString()}) does not match expected CID (${cid})`);
+		let root = (await car.getRoots())[0]
+		if (!Multiformats.CID.parse(cid).equals(root)) {
+			doLog(`Mismatch: root CID of CAR (${root.toString()}) does not match expected CID (${cid})`, true);
 			return;
 		}
 	}
 
-	for await (const { bytes, cid } of car) {
+	let extend = function(a, b) {
+		let c = new Uint8Array(a.length + b.length);
+		c.set(a, 0);
+		c.set(b, a.length);
+		return c;
+	}
+
+	for await (const { bytes, cid } of car.blocks()) {
 		// Verify step 2: is this a CID we know how to deal with?
 		if (!codecs[cid.code]) {
-			console.log(`Unexpected codec: 0x${cid.code.toString(16)}`);
+			doLog(`Unexpected codec: 0x${cid.code.toString(16)}`, true);
 			return;
 		}
 		if (!hashes[cid.multihash.code]) {
-			console.log(`Unexpected multihash code: 0x${cid.multihash.code.toString(16)}`);
+			doLog(`Unexpected multihash code: 0x${cid.multihash.code.toString(16)}`, true);
 			return;
 		}
 
 		// Verify step 3: if we hash the bytes, do we get the same digest as reported by the CID?
 		const hash = await hashes[cid.multihash.code].digest(bytes)
 		if (Multiformats.bytes.toHex(hash.digest) !== Multiformats.bytes.toHex(cid.multihash.digest)) {
-			console.log(`Mismatch: digest of bytes does not match digest in CID: ${cid}`);
+			doLog(`Mismatch: digest of bytes does not match digest in CID: ${cid}`, true);
 			return;
 		}
 
-		console.log("This CAR seems legit!");
+		doLog(bytes);
+		returnedBytes = extend(returnedBytes, codecs[cid.code].decode(bytes));
 	}
+
+	doLog("This CAR seems legit!", true);
+
+	// Return the underlying data within the CAR file
+	return returnedBytes;
+}
+
+// setFile sets the currentFile global to the file selected by the user
+function setFile(input) {
+	currentFile = input.files[0];
 }
 
 // readFile reads a CAR file from disk and verifies it
-function readFile(input) {
-	let file = input.files[0];
+function readFile() {
+	if (currentFile == undefined) {
+		return;
+	}
+	let file = currentFile;
 
 	// Read the file into an ArrayBuffer
 	let reader = new FileReader();
@@ -131,7 +176,30 @@ function readFile(input) {
 	};
 
 	reader.onerror = function() {
-		console.log(reader.error);
+		doLog(reader.error, true);
 	};
+}
 
+function showTool(n) {
+	let file_verifier = document.getElementById("file_verifier");
+	let gateway_verifier = document.getElementById("gateway_verifier");
+	let more_info = document.getElementById("helpful_info");
+	let timeout = 500;
+	if (firstClick) {
+		timeout = 0;
+		firstClick = false;
+	}
+	if (n == 0) {
+		setTimeout(function(){file_verifier.classList.add("unhidden");}, timeout);
+		gateway_verifier.classList.remove("unhidden");
+		more_info.classList.remove("unhidden");
+	} else if (n == 1) {
+		file_verifier.classList.remove("unhidden");
+		setTimeout(function(){gateway_verifier.classList.add("unhidden");}, timeout);
+		more_info.classList.remove("unhidden");
+	} else if (n == 2) {
+		file_verifier.classList.remove("unhidden");
+		gateway_verifier.classList.remove("unhidden");
+		setTimeout(function(){more_info.classList.add("unhidden");}, timeout);
+	}
 }
