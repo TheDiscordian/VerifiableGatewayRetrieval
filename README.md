@@ -23,7 +23,7 @@ npm run build
 
 ## Run Demo
 
-Run `npm start` and navigate to http://localhost:8000/ in your browser or [click here](https://ipfs.io/ipfs/QmPGuqboSpcmRsXzUEgHo4jXkaSxFw7s5S3ESZGBwawFWg) to see a snapshot.
+Run `npm start` and navigate to http://localhost:8000/ in your browser or [click here](https://bafybeian4z4gqxqvpoei34xc65fymi2rwjmp2czmj6hm5eyz5o5mdhw36e.ipfs.w3s.link/) to see a snapshot.
 
 ## Contributing
 
