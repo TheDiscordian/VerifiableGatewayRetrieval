@@ -3,12 +3,25 @@
 <head>
 	<title>CAR Verifier</title>
 	<meta charset="utf-8">
-	<script src="libs/multiformats.min.js"></script>
-	<script src="libs/ipld-car.min.js"></script>
-	<script src="libs/ipld-dag-cbor.min.js"></script>
-	<script src="libs/ipld-dag-pb.min.js"></script>
-	<script src="libs/ipld-dag-json.min.js"></script>
-	<script src="script.js"></script>
+	<script type="importmap">
+		{
+			"imports": {
+				"browser-readablestream-to-it": "./libs/browser-readablestream-to-it/index.js",
+				"unpack-car": "./libs/unpack-car.js",
+				"uint8arrays/equals": "./libs/uint8arrays/equals.js"
+			}
+		}
+	</script>
+
+	<script src="libs/multiformats.min.js" type="module"></script>
+	<script src="libs/ipld-car.min.js" type="module"></script>
+	<script src="libs/ipld-dag-cbor.min.js" type="module"></script>
+	<script src="libs/ipld-dag-pb.min.js" type="module"></script>
+	<script src="libs/ipld-dag-json.min.js" type="module"></script>
+	<script src="libs/blockstore-core.min.js" type="module"></script>
+	<script src="libs/ipfs-unixfs-exporter.min.js" type="module"></script>
+
+	<script src="script.js" type="module"></script>
 	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 

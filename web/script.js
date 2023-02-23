@@ -1,6 +1,8 @@
+import {unpack} from "unpack-car";
 let currentFile = undefined;
 let firstClick = true;
 let firstLog = true;
+let tool_transition = false;
 
 // sha256 hasher for the browser
 const sha256 = Multiformats.hasher.from({
@@ -11,6 +13,7 @@ const sha256 = Multiformats.hasher.from({
 
 	encode: (input) => (async () => new Uint8Array(await crypto.subtle.digest('SHA-256', input)))()
 });
+window.sha256 = sha256;
 
 // The codecs we support
 const codecs = {
@@ -61,6 +64,7 @@ async function _fetchCar(cid) {
 	doLog(`Using gateway: ${gateway.url}`);
 	return await fetchCar(cid, gateway);
 }
+window._fetchCar = _fetchCar;
 
 // fetchCar fetches a CAR file from the given gateway and verifies it, returning the underlying data
 async function fetchCar(cid, gateway) {
@@ -100,7 +104,7 @@ async function verifyCar(carFile, cid) {
 	// const car = await IpldCar.CarBlockIterator.fromBytes(carFile);
 	const car = await IpldCar.CarReader.fromBytes(carFile);
 	doLog(car)
-	let returnedBytes = new Uint8Array();
+	//let returnedBytes = new Uint8Array();
 	
 	//  Verify step 1: if we know what CID to expect, check that's indeed what we've got
 	if (cid != undefined) {
@@ -137,19 +141,27 @@ async function verifyCar(carFile, cid) {
 		}
 
 		doLog(bytes);
-		returnedBytes = extend(returnedBytes, codecs[cid.code].decode(bytes));
+		//returnedBytes = extend(returnedBytes, codecs[cid.code].decode(bytes));
 	}
 
 	doLog("This CAR seems legit!", true);
 
 	// Return the underlying data within the CAR file
-	return returnedBytes;
+	//return returnedBytes;
+	let f = undefined;
+	for await (const file of unpack(car)) {
+		f = file;
+		break; // Only read one file from CAR
+	}
+	return f;
 }
+window.verifyCar = verifyCar;
 
 // setFile sets the currentFile global to the file selected by the user
 function setFile(input) {
 	currentFile = input.files[0];
 }
+window.setFile = setFile;
 
 // readFile reads a CAR file from disk and verifies it
 function readFile() {
@@ -179,27 +191,33 @@ function readFile() {
 		doLog(reader.error, true);
 	};
 }
+window.readFile = readFile;
 
 function showTool(n) {
+	if (tool_transition) {
+		return;
+	}
+	tool_transition = true;
 	let file_verifier = document.getElementById("file_verifier");
 	let gateway_verifier = document.getElementById("gateway_verifier");
 	let more_info = document.getElementById("helpful_info");
-	let timeout = 500;
+	let timeout = 499;
 	if (firstClick) {
 		timeout = 0;
 		firstClick = false;
 	}
 	if (n == 0) {
-		setTimeout(function(){file_verifier.classList.add("unhidden");}, timeout);
+		setTimeout(function(){file_verifier.classList.add("unhidden");tool_transition = false;}, timeout);
 		gateway_verifier.classList.remove("unhidden");
 		more_info.classList.remove("unhidden");
 	} else if (n == 1) {
 		file_verifier.classList.remove("unhidden");
-		setTimeout(function(){gateway_verifier.classList.add("unhidden");}, timeout);
+		setTimeout(function(){gateway_verifier.classList.add("unhidden");tool_transition = false;}, timeout);
 		more_info.classList.remove("unhidden");
 	} else if (n == 2) {
 		file_verifier.classList.remove("unhidden");
 		gateway_verifier.classList.remove("unhidden");
-		setTimeout(function(){more_info.classList.add("unhidden");}, timeout);
+		setTimeout(function(){more_info.classList.add("unhidden");tool_transition = false;}, timeout);
 	}
 }
+window.showTool = showTool;
